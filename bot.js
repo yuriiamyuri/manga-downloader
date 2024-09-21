@@ -129,29 +129,29 @@ bot.on("callback_query", async (query) => {
     
     console.log(data, chapterLink, chapterNumber);
 
-    // try {
-    //     // Fetch chapter images
-    //     const imgs = await getChapterPages(chapterLink);
+    try {
+        // Fetch chapter images
+        const imgs = await getChapterPages(chapterLink);
 
-    //     // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
-    //     await bot.sendChatAction(chatId, 'upload_document');
+        // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
+        await bot.sendChatAction(chatId, 'upload_document');
 
-    //     // Create PDF from images
-    //     await createPDFWithImages(imgs, `${query.message.caption} - chapter ${chapterNumber}.pdf`);
+        // Create PDF from images
+        await createPDFWithImages(imgs, `${query.message.caption} - chapter ${chapterNumber}.pdf`);
 
-    //     // Send the PDF file
-    //     await bot.sendDocument(chatId, path.resolve(__dirname, `${query.message.caption} - chapter ${chapterNumber}.pdf`), {
-    //         caption: `${query.message.caption} - chapter ${chapterNumber} downloaded successfully.`
-    //     });
+        // Send the PDF file
+        await bot.sendDocument(chatId, path.resolve(__dirname, `${query.message.caption} - chapter ${chapterNumber}.pdf`), {
+            caption: `${query.message.caption} - chapter ${chapterNumber} downloaded successfully.`
+        });
 
-    //     // Delete the PDF file after it's sent to avoid storing unnecessary files
-    //     fs.unlinkSync(path.resolve(__dirname, `${query.message.caption} - chapter ${chapterNumber}.pdf`));
+        // Delete the PDF file after it's sent to avoid storing unnecessary files
+        fs.unlinkSync(path.resolve(__dirname, `${query.message.caption} - chapter ${chapterNumber}.pdf`));
 
-    // } catch (error) {
-    //     console.error("An error occurred:", error);
-    //     // Optionally, you can send a message to the user indicating that something went wrong.
-    //     await bot.sendMessage(chatId, "Oops! Something went wrong while downloading the chapter.");
-    // }
+    } catch (error) {
+        console.error("An error occurred:", error);
+        // Optionally, you can send a message to the user indicating that something went wrong.
+        await bot.sendMessage(chatId, "Oops! Something went wrong while downloading the chapter.");
+    }
 }
 
 });
