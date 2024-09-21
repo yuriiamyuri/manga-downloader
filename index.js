@@ -3,24 +3,27 @@ import fs from 'fs';
 import axios from 'axios';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import sharp from 'sharp'; // Add sharp for image conversion
+import sharp from 'sharp'; // For PNG optimization
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-async function downloadImage(url, filepath) {
+async function downloadAndCompressImage(url, filepath) {
     const response = await axios({
         url,
         method: 'GET',
         responseType: 'arraybuffer', // Download image as a buffer
     });
 
-    // Save the image buffer to file
     const buffer = response.data;
-    const tempFilePath = `${filepath}.png`; // Force PNG extension
 
-    // Convert the image to PNG using sharp
-    await sharp(buffer).toFormat('png').toFile(tempFilePath);
+    // Compress and resize PNG images using sharp
+    const tempFilePath = `${filepath}.png`; // Keep the extension as PNG
+
+    await sharp(buffer)
+        .resize({ width: 800 }) // Resize image for smaller dimensions
+        .png({ quality: 70, compressionLevel: 8 }) // Reduce PNG quality and increase compression
+        .toFile(tempFilePath);
 
     return tempFilePath;
 }
@@ -35,7 +38,7 @@ async function createPDFWithImages(imageUrls, outputPath) {
         const tempFilePath = path.join(__dirname, `temp_image_${i}`);
 
         try {
-            const downloadedImagePath = await downloadImage(url, tempFilePath);
+            const downloadedImagePath = await downloadAndCompressImage(url, tempFilePath);
 
             if (i > 0) doc.addPage();
             doc.image(downloadedImagePath, {
