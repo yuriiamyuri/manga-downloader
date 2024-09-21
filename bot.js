@@ -134,12 +134,14 @@ bot.on("callback_query", async (query) => {
 
     const chapterLink = data[1].split("|")[0];
     const chapterNumber = data[1].split("|")[1];
+    chapterLink = decodeURIComponent(chapterLink);
 
     console.log(data, chapterLink, chapterNumber);
 
+
     try {
       // Fetch chapter images
-      const imgs = await getChapterPages(decodeURIComponent(chapterLink));
+      const imgs = await getChapterPages(chapterLink);
 
       // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
       await bot.sendChatAction(chatId, "upload_document");
