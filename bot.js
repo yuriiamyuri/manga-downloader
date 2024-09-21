@@ -40,7 +40,7 @@ const paginateChapters = (chapters, page = 1) => {
       inline_keyboard.push([
         {
           text: chp.chapterNumber,
-          callback_data: ("chP/" + chp.link + "|" + chp.chapterNumber).slice(
+          callback_data: ("chP/" + decodeURIComponent(chp.link) + "|" + chp.chapterNumber).slice(
             0,
             64
           ),
@@ -50,7 +50,7 @@ const paginateChapters = (chapters, page = 1) => {
       // For other chapters, create rows with 3 buttons
       row.push({
         text: chp.chapterNumber,
-        callback_data: ("chP/" + chp.link + "|" + chp.chapterNumber).slice(
+        callback_data: ("chP/" + decodeURIComponent(chp.link) + "|" + chp.chapterNumber).slice(
           0,
           64
         ),
@@ -134,12 +134,7 @@ bot.on("callback_query", async (query) => {
 
     const chapterLink = data[1].split("|")[0];
     const chapterNumber = data[1].split("|")[1];
-    try {
-      chapterLink = decodeURIComponent(chapterLink);
-  } catch (e) {
-      console.error("Failed to decode URI component:", e);
-      // Optionally, handle the error or assign a default value
-  }
+  
   
 
     console.log(data, chapterLink, chapterNumber);
