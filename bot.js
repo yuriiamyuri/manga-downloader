@@ -147,7 +147,7 @@ bot.on("callback_query", async (query) => {
       // Create PDF from images
       await createPDFWithImages(
         imgs,
-        `${query.message.caption} - chapter ${chapterNumber}.pdf`
+        `${query.message.caption} - chapter ${chapterNumber.split(" ")[0]}.pdf`
       );
 
       // Send the PDF file
