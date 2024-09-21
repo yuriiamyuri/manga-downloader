@@ -130,21 +130,18 @@ bot.on("callback_query", async (query) => {
   } else if (query.data.startsWith("chP/")) {
     // Extract chapter link and chapter number
     const data = query.data.split("P/");
-    console.log(data);
+    console.log('First Data: ',data);
 
     let chapterLink = data[1].split("|")[0];
     const chapterNumber = data[1].split("|")[1];
-    try {
+ 
       chapterLink = decodeURIComponent(chapterLink);
-      console.log(chapterLink);
+      console.log('decoded url: ', chapterLink);
       
-  } catch (e) {
-      console.error("Failed to decode URI component:", e);
-      // Optionally, handle the error or assign a default value
-  }
+  
   
 
-    console.log(data, chapterLink, chapterNumber);
+    console.log('second: ', data, chapterLink, chapterNumber);
 
 
     // try {
