@@ -61,7 +61,7 @@ async function getSpecificMangaInfo(mangaName) {
     }];
     chaptersElements.each((i, chp) => {
 
-        const link = $(chp).find("a").attr("href");
+        const link = decodeURIComponent($(chp).find("a").attr("href"));
         const chapterNumber = $(chp).find("a").text().trim();
 
 

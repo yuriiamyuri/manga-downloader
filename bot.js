@@ -40,7 +40,7 @@ const paginateChapters = (chapters, page = 1) => {
       inline_keyboard.push([
         {
           text: chp.chapterNumber,
-          callback_data: ("chP/" + encodeURIComponent(chp.link.split("manga/")[1])).slice(
+          callback_data: ("chP/" + chp.link.split("manga/")[1]).slice(
             0,
             64
           ),
@@ -50,7 +50,7 @@ const paginateChapters = (chapters, page = 1) => {
       // For other chapters, create rows with 3 buttons
       row.push({
         text: chp.chapterNumber,
-        callback_data: ("chP/" + encodeURIComponent(chp.link.split("manga/")[1])).slice(
+        callback_data: ("chP/" + chp.link.split("manga/")[1]).slice(
           0,
           64
         ),
@@ -135,8 +135,8 @@ bot.on("callback_query", async (query) => {
     console.log('First Data: ',data);
 
     let chapterLink = base_url + data[1];
-    chapterLink = decodeURIComponent(chapterLink);
-    const chapterNumber = chapterLink.split("manga/").split("/")[1];
+    
+    const chapterNumber = chapterLink.split("manga/").split("/")[1].split("-").join(" ");
  
       
       console.log('decoded url: ', chapterLink);
