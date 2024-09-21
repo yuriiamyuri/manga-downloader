@@ -134,7 +134,13 @@ bot.on("callback_query", async (query) => {
 
     const chapterLink = data[1].split("|")[0];
     const chapterNumber = data[1].split("|")[1];
-    chapterLink = decodeURIComponent(chapterLink);
+    try {
+      chapterLink = decodeURIComponent(chapterLink);
+  } catch (e) {
+      console.error("Failed to decode URI component:", e);
+      // Optionally, handle the error or assign a default value
+  }
+  
 
     console.log(data, chapterLink, chapterNumber);
 
