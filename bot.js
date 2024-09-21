@@ -40,14 +40,14 @@ const paginateChapters = (chapters, page = 1) => {
       inline_keyboard.push([
         {
           text: chp.chapterNumber,
-          callback_data: ("chP/" + chp.link.split("manga/")[1])
+          callback_data: ("chP/" + chp.id)
         },
       ]);
     } else {
       // For other chapters, create rows with 3 buttons
       row.push({
         text: chp.chapterNumber,
-        callback_data: ("chP/" + chp.link.split("manga/")[1])
+        callback_data: ("chP/" + chp.id)
       });
       counter++;
 
@@ -110,6 +110,7 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
 bot.on("callback_query", async (query) => {
   const chatId = query.message.chat.id;
   const messageId = query.message.message_id;
+  const caption = query.message.caption;
 
   if (query.data.startsWith("chpPage/")) {
     const page = parseInt(query.data.split("/")[1], 10); // Fetch manga info again for simplicity
@@ -126,17 +127,22 @@ bot.on("callback_query", async (query) => {
   } else if (query.data.startsWith("chP/")) {
     // Extract chapter link and chapter number
 
-    const base_url = 'https://lekmanga.net/manga/';
+    
     const data = query.data.split("P/");
     console.log('First Data: ',data);
+    const mangaId = data[1];
+    const mangaName = caption;
 
-    let chapterLink = base_url + data[1];
+    console.log(mangaId, mangaName);
     
-    const chapterNumber = chapterLink.split("manga/")[1].split("/")[1].split("-").join(" ");
+
+    // let chapterLink = base_url + data[1];
+    
+    // const chapterNumber = chapterLink.split("manga/")[1].split("/")[1].split("-").join(" ");
  
       
-    console.log('decoded url: ', chapterLink);
-    console.log('chapter number: ', chapterNumber);
+    // console.log('decoded url: ', chapterLink);
+    // console.log('chapter number: ', chapterNumber);
     
       
   

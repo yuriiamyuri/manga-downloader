@@ -66,6 +66,7 @@ async function getSpecificMangaInfo(mangaName) {
 
 
         mangaDetails[0].chapters.push({
+            id: i + 1,
             link,
             chapterNumber
         })
@@ -138,6 +139,18 @@ async function getChapterPages(chapterUrl) {
     
 // })
 
+
+
+async function findMangaById(mangaId, mangaName) {
+    
+    const manga_info = await getSpecificMangaInfo(mangaName);
+
+    const chapters_Of_The_Manga = manga_info[0].chapters;
+
+    const chapter = chapters_Of_The_Manga.find((chp, i) => chp.id = mangaId);
+
+    return chapter;
+}
 
 
 
