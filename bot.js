@@ -1,7 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
 import { config } from "dotenv";
 import {
   getMainPage,
@@ -13,12 +13,8 @@ import { createPDFWithImages } from "./index.js";
 
 config();
 
-
- 
-
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename)
-
+const __dirname = dirname(__filename);
 
 const token = process.env.BOT_TOKEN;
 
@@ -42,11 +38,23 @@ const paginateChapters = (chapters, page = 1) => {
     if (index % 4 === 3) {
       // For every 4th chapter, create a row with 1 button
       inline_keyboard.push([
-        { text: chp.chapterNumber, callback_data: ("chP/" + chp.link+'|'+chp.chapterNumber).slice(0, 64) },
+        {
+          text: chp.chapterNumber,
+          callback_data: ("chP/" + chp.link + "|" + chp.chapterNumber).slice(
+            0,
+            64
+          ),
+        },
       ]);
     } else {
       // For other chapters, create rows with 3 buttons
-      row.push({ text: chp.chapterNumber, callback_data: ("chP/" + chp.link+'|'+chp.chapterNumber).slice(0, 64) });
+      row.push({
+        text: chp.chapterNumber,
+        callback_data: ("chP/" + chp.link + "|" + chp.chapterNumber).slice(
+          0,
+          64
+        ),
+      });
       counter++;
 
       if (counter === 3) {
@@ -64,7 +72,10 @@ const paginateChapters = (chapters, page = 1) => {
 
   const navigation = [];
   if (page > 1) {
-    navigation.push({ text: "⬅️ Previous", callback_data: `chpPage/${page - 1}` });
+    navigation.push({
+      text: "⬅️ Previous",
+      callback_data: `chpPage/${page - 1}`,
+    });
   }
   if (page < totalPages) {
     navigation.push({ text: "Next ➡️", callback_data: `chpPage/${page + 1}` });
@@ -89,8 +100,7 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
     );
   } else {
     const inline_keyboard = paginateChapters(mangaInfo[0].chapters, 1);
-    
-    
+
     bot.sendPhoto(chatId, mangaInfo[0].mangaCover, {
       caption: mangaName.toUpperCase(),
       reply_markup: {
@@ -118,40 +128,71 @@ bot.on("callback_query", async (query) => {
       { chat_id: chatId, message_id: messageId }
     );
   } else if (query.data.startsWith("chP/")) {
-    
-
     // Extract chapter link and chapter number
     const data = query.data.split("P/");
     console.log(data);
-    
+
     const chapterLink = data[1].split("|")[0];
     const chapterNumber = data[1].split("|")[1];
-    
+
     console.log(data, chapterLink, chapterNumber);
 
     try {
-        // Fetch chapter images
-        const imgs = await getChapterPages(chapterLink);
+      // Fetch chapter images
+      const imgs = await getChapterPages(chapterLink);
 
-        // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
-        await bot.sendChatAction(chatId, 'upload_document');
+      // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
+      await bot.sendChatAction(chatId, "upload_document");
 
-        // Create PDF from images
-        await createPDFWithImages(imgs, `${query.message.caption} - chapter ${chapterNumber}.pdf`);
+      // Create PDF from images
+      await createPDFWithImages(
+        imgs,
+        `${query.message.caption} - chapter ${chapterNumber}.pdf`
+      );
 
-        // Send the PDF file
-        await bot.sendDocument(chatId, path.resolve(__dirname, `${query.message.caption} - chapter ${chapterNumber}.pdf`), {
-            caption: `${query.message.caption} - chapter ${chapterNumber} downloaded successfully.`
-        });
+      // Send the PDF file
+      await bot.sendDocument(
+        chatId,
+        path.resolve(
+          __dirname,
+          `${query.message.caption} - chapter ${chapterNumber}.pdf`
+        ),
+        {
+          caption: `${query.message.caption} - chapter ${chapterNumber} got downloaded successfully.`,
+        }
+      );
 
-        // Delete the PDF file after it's sent to avoid storing unnecessary files
-        fs.unlinkSync(path.resolve(__dirname, `${query.message.caption} - chapter ${chapterNumber}.pdf`));
-
+      // Delete the PDF file after it's sent to avoid storing unnecessary files
+      fs.unlinkSync(
+        path.resolve(
+          __dirname,
+          `${query.message.caption} - chapter ${chapterNumber}.pdf`
+        )
+      );
     } catch (error) {
-        console.error("An error occurred:", error);
-        // Optionally, you can send a message to the user indicating that something went wrong.
-        await bot.sendMessage(chatId, "Oops! Something went wrong while downloading the chapter.");
+      console.error("An error occurred:", error);
+      // Optionally, you can send a message to the user indicating that something went wrong.
+      await bot.sendMessage(
+        chatId,
+        "Oops! Something went wrong while downloading the chapter."
+      );
     }
-}
+  }
+});
 
+bot.onText(/\/start/, (msg) => {
+  const chatId = msg.chat.id;
+  const userName = msg.from.first_name;
+  const startMessage = `Hello ${userName}! 👋 Welcome to MangaPDF Bot.
+
+🔍 To download manga chapters as PDF:
+    1. Use the /search command
+    2. Type the manga name
+    3. Select the chapter you want
+
+Example: /search One Punch Man --> There will be chapters to choose from --> choose one chapter
+
+📚 The bot will then send you the selected chapter as a PDF file.`;
+
+  bot.sendMessage(chatId, startMessage);
 });
