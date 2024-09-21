@@ -159,7 +159,7 @@ bot.on("callback_query", async (query) => {
       const imgs = await getChapterPages(chapter.link);
 
       // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
-      await bot.sendChatAction(chatId, "upload_document");
+      
 
       // Create PDF from images
       await createPDFWithImages(
@@ -167,6 +167,8 @@ bot.on("callback_query", async (query) => {
         `${query.message.caption} - chapter ${chapter.chapterNumber}.pdf`
       );
 
+
+      await bot.sendChatAction(chatId, "upload_document");
       // Send the PDF file
       await bot.sendDocument(
         chatId,
@@ -187,7 +189,7 @@ bot.on("callback_query", async (query) => {
         )
       );
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.log("An error occurred:", error);
       // Optionally, you can send a message to the user indicating that something went wrong.
       await bot.sendMessage(
         chatId,
