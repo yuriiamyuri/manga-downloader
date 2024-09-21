@@ -94,6 +94,8 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
   const mangaInfo = await getSpecificMangaInfo(mangaName);
 
   if (!mangaInfo[0].mangaCover && mangaInfo[0].chapters.length === 0) {
+    console.log(mangaInfo);
+    
     bot.sendMessage(
       chatId,
       "No Results Found.\n\nEither there are no results or You Typed a wrong manga name. \n\nIt's Case sensitive so try to modify the name and if the problem persists then THERE ARE NO RESULTS."
