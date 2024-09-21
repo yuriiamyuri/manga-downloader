@@ -132,10 +132,19 @@ bot.on("callback_query", async (query) => {
     console.log('First Data: ',data);
     const mangaId = data[1];
     const mangaName = caption;
+    // let chapterLink = null;
+    // let chapterNumber = null;
 
     console.log(mangaId, mangaName);
     
+    const manga_info = await getSpecificMangaInfo(mangaName);
 
+    const chapters_Of_The_Manga = manga_info[0].chapters;
+
+    const chapter = chapters_Of_The_Manga.find((chp, i) => chp.id == mangaId);
+
+    console.log(chapter);
+    
     // let chapterLink = base_url + data[1];
     
     // const chapterNumber = chapterLink.split("manga/")[1].split("/")[1].split("-").join(" ");
