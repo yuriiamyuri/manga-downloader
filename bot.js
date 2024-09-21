@@ -144,7 +144,7 @@ bot.on("callback_query", async (query) => {
   
   
 
-    console.log('second: ', data, chapterLink, chapterNumber);
+    console.log('second: ', chapterLink , ' ||| ', chapterNumber);
 
 
     // try {
