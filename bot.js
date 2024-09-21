@@ -40,7 +40,7 @@ const paginateChapters = (chapters, page = 1) => {
       inline_keyboard.push([
         {
           text: chp.chapterNumber,
-          callback_data: ("chP/" + decodeURIComponent(chp.link) + "|" + chp.chapterNumber).slice(
+          callback_data: ("chP/" + chp.link + "|" + chp.chapterNumber).slice(
             0,
             64
           ),
@@ -50,7 +50,7 @@ const paginateChapters = (chapters, page = 1) => {
       // For other chapters, create rows with 3 buttons
       row.push({
         text: chp.chapterNumber,
-        callback_data: ("chP/" + decodeURIComponent(chp.link) + "|" + chp.chapterNumber).slice(
+        callback_data: ("chP/" + chp.link + "|" + chp.chapterNumber).slice(
           0,
           64
         ),
@@ -132,54 +132,59 @@ bot.on("callback_query", async (query) => {
     const data = query.data.split("P/");
     console.log(data);
 
-    const chapterLink = data[1].split("|")[0];
+    let chapterLink = data[1].split("|")[0];
     const chapterNumber = data[1].split("|")[1];
-  
+    try {
+      chapterLink = decodeURIComponent(chapterLink);
+  } catch (e) {
+      console.error("Failed to decode URI component:", e);
+      // Optionally, handle the error or assign a default value
+  }
   
 
     console.log(data, chapterLink, chapterNumber);
 
 
-    try {
-      // Fetch chapter images
-      const imgs = await getChapterPages(chapterLink);
+    // try {
+    //   // Fetch chapter images
+    //   const imgs = await getChapterPages(chapterLink);
 
-      // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
-      await bot.sendChatAction(chatId, "upload_document");
+    //   // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
+    //   await bot.sendChatAction(chatId, "upload_document");
 
-      // Create PDF from images
-      await createPDFWithImages(
-        imgs,
-        `${query.message.caption} - chapter ${chapterNumber.split(" ")[0]}.pdf`
-      );
+    //   // Create PDF from images
+    //   await createPDFWithImages(
+    //     imgs,
+    //     `${query.message.caption} - chapter ${chapterNumber.split(" ")[0]}.pdf`
+    //   );
 
-      // Send the PDF file
-      await bot.sendDocument(
-        chatId,
-        path.resolve(
-          __dirname,
-          `${query.message.caption} - chapter ${chapterNumber}.pdf`
-        ),
-        {
-          caption: `${query.message.caption} - chapter ${chapterNumber} got downloaded successfully.`,
-        }
-      );
+    //   // Send the PDF file
+    //   await bot.sendDocument(
+    //     chatId,
+    //     path.resolve(
+    //       __dirname,
+    //       `${query.message.caption} - chapter ${chapterNumber}.pdf`
+    //     ),
+    //     {
+    //       caption: `${query.message.caption} - chapter ${chapterNumber} got downloaded successfully.`,
+    //     }
+    //   );
 
-      // Delete the PDF file after it's sent to avoid storing unnecessary files
-      fs.unlinkSync(
-        path.resolve(
-          __dirname,
-          `${query.message.caption} - chapter ${chapterNumber}.pdf`
-        )
-      );
-    } catch (error) {
-      console.error("An error occurred:", error);
-      // Optionally, you can send a message to the user indicating that something went wrong.
-      await bot.sendMessage(
-        chatId,
-        "Oops! Something went wrong while downloading the chapter."
-      );
-    }
+    //   // Delete the PDF file after it's sent to avoid storing unnecessary files
+    //   fs.unlinkSync(
+    //     path.resolve(
+    //       __dirname,
+    //       `${query.message.caption} - chapter ${chapterNumber}.pdf`
+    //     )
+    //   );
+    // } catch (error) {
+    //   console.error("An error occurred:", error);
+    //   // Optionally, you can send a message to the user indicating that something went wrong.
+    //   await bot.sendMessage(
+    //     chatId,
+    //     "Oops! Something went wrong while downloading the chapter."
+    //   );
+    // }
   }
 });
 

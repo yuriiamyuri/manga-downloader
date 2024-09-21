@@ -130,9 +130,9 @@ async function getChapterPages(chapterUrl) {
 }
 
 
-// getSpecificMangaInfo("one punch man").then(res => {
+// getSpecificMangaInfo("vinland").then(res => {
 //     res[0].chapters.forEach(chp => {
-//         console.log(decodeURIComponent(chp.link));
+//         console.log(chp.link);
         
 //     })
     
