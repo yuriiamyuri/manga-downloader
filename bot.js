@@ -40,20 +40,14 @@ const paginateChapters = (chapters, page = 1) => {
       inline_keyboard.push([
         {
           text: chp.chapterNumber,
-          callback_data: ("chP/" + chp.link.split("manga/")[1]).slice(
-            0,
-            64
-          ),
+          callback_data: ("chP/" + chp.link.split("manga/")[1])
         },
       ]);
     } else {
       // For other chapters, create rows with 3 buttons
       row.push({
         text: chp.chapterNumber,
-        callback_data: ("chP/" + chp.link.split("manga/")[1]).slice(
-          0,
-          64
-        ),
+        callback_data: ("chP/" + chp.link.split("manga/")[1])
       });
       counter++;
 
