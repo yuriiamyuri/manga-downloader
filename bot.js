@@ -139,12 +139,12 @@ bot.on("callback_query", async (query) => {
     const chapterNumber = chapterLink.split("manga/")[1].split("/")[1].split("-").join(" ");
  
       
-      console.log('decoded url: ', chapterLink);
+    console.log('decoded url: ', chapterLink , ' ||| ', chapterNumber);
       
   
   
 
-    console.log('second: ', chapterLink , ' ||| ', chapterNumber);
+    
 
 
     // try {
