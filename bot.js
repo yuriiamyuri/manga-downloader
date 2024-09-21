@@ -42,11 +42,11 @@ const paginateChapters = (chapters, page = 1) => {
     if (index % 4 === 3) {
       // For every 4th chapter, create a row with 1 button
       inline_keyboard.push([
-        { text: chp.chapterNumber, callback_data: "chP/" + chp.link+'|'+chp.chapterNumber },
+        { text: chp.chapterNumber, callback_data: ("chP/" + chp.link+'|'+chp.chapterNumber).slice(0, 64) },
       ]);
     } else {
       // For other chapters, create rows with 3 buttons
-      row.push({ text: chp.chapterNumber, callback_data: "chP/" + chp.link+'|'+chp.chapterNumber });
+      row.push({ text: chp.chapterNumber, callback_data: ("chP/" + chp.link+'|'+chp.chapterNumber).slice(0, 64) });
       counter++;
 
       if (counter === 3) {

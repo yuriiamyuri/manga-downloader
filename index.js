@@ -43,7 +43,7 @@ async function createPDFWithImages(imageUrls, outputPath) {
 
             if (i > 0) doc.addPage();
             doc.image(tempFilePath, {
-                fit: [500, 500],
+                fit: [doc.page.width - 30, doc.page.height - 30],
                 align: 'center',
                 valign: 'center'
             });
