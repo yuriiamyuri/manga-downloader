@@ -40,7 +40,7 @@ const paginateChapters = (chapters, page = 1) => {
       inline_keyboard.push([
         {
           text: chp.chapterNumber,
-          callback_data: ("chP/" + chp.link + "|" + chp.chapterNumber).slice(
+          callback_data: ("chP/" + encodeURIComponent(chp.link) + "|" + chp.chapterNumber).slice(
             0,
             64
           ),
@@ -50,7 +50,7 @@ const paginateChapters = (chapters, page = 1) => {
       // For other chapters, create rows with 3 buttons
       row.push({
         text: chp.chapterNumber,
-        callback_data: ("chP/" + chp.link + "|" + chp.chapterNumber).slice(
+        callback_data: ("chP/" + encodeURIComponent(chp.link) + "|" + chp.chapterNumber).slice(
           0,
           64
         ),
