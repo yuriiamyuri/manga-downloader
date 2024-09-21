@@ -145,13 +145,7 @@ bot.on("callback_query", async (query) => {
 
     console.log(chapter);
     
-    // let chapterLink = base_url + data[1];
     
-    // const chapterNumber = chapterLink.split("manga/")[1].split("/")[1].split("-").join(" ");
- 
-      
-    // console.log('decoded url: ', chapterLink);
-    // console.log('chapter number: ', chapterNumber);
     
       
   
@@ -160,46 +154,46 @@ bot.on("callback_query", async (query) => {
     
 
 
-    // try {
-    //   // Fetch chapter images
-    //   const imgs = await getChapterPages(chapterLink);
+    try {
+      // Fetch chapter images
+      const imgs = await getChapterPages(chapter.link);
 
-    //   // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
-    //   await bot.sendChatAction(chatId, "upload_document");
+      // Indicate that the bot is preparing to send a document (i.e., "upload_document" status)
+      await bot.sendChatAction(chatId, "upload_document");
 
-    //   // Create PDF from images
-    //   await createPDFWithImages(
-    //     imgs,
-    //     `${query.message.caption} - chapter ${chapterNumber.split(" ")[0]}.pdf`
-    //   );
+      // Create PDF from images
+      await createPDFWithImages(
+        imgs,
+        `${query.message.caption} - chapter ${chapter.chapterNumber}.pdf`
+      );
 
-    //   // Send the PDF file
-    //   await bot.sendDocument(
-    //     chatId,
-    //     path.resolve(
-    //       __dirname,
-    //       `${query.message.caption} - chapter ${chapterNumber}.pdf`
-    //     ),
-    //     {
-    //       caption: `${query.message.caption} - chapter ${chapterNumber} got downloaded successfully.`,
-    //     }
-    //   );
+      // Send the PDF file
+      await bot.sendDocument(
+        chatId,
+        path.resolve(
+          __dirname,
+          `${query.message.caption} - chapter ${chapter.chapterNumber}.pdf`
+        ),
+        {
+          caption: `${query.message.caption} - chapter ${chapter.chapterNumber} got downloaded successfully.`,
+        }
+      );
 
-    //   // Delete the PDF file after it's sent to avoid storing unnecessary files
-    //   fs.unlinkSync(
-    //     path.resolve(
-    //       __dirname,
-    //       `${query.message.caption} - chapter ${chapterNumber}.pdf`
-    //     )
-    //   );
-    // } catch (error) {
-    //   console.error("An error occurred:", error);
-    //   // Optionally, you can send a message to the user indicating that something went wrong.
-    //   await bot.sendMessage(
-    //     chatId,
-    //     "Oops! Something went wrong while downloading the chapter."
-    //   );
-    // }
+      // Delete the PDF file after it's sent to avoid storing unnecessary files
+      fs.unlinkSync(
+        path.resolve(
+          __dirname,
+          `${query.message.caption} - chapter ${chapter.chapterNumber}.pdf`
+        )
+      );
+    } catch (error) {
+      console.error("An error occurred:", error);
+      // Optionally, you can send a message to the user indicating that something went wrong.
+      await bot.sendMessage(
+        chatId,
+        "Oops! Something went wrong while downloading the chapter."
+      );
+    }
   }
 });
 

@@ -131,24 +131,15 @@ async function getChapterPages(chapterUrl) {
 }
 
 
-getSpecificMangaInfo("vinland").then(res => {
-   console.log(res[0].chapters);
+// getSpecificMangaInfo("vinland").then(res => {
+//    console.log(res[0].chapters);
    
     
-})
+// })
 
 
 
-async function findMangaById(mangaId, mangaName) {
-    
-    const manga_info = await getSpecificMangaInfo(mangaName);
 
-    const chapters_Of_The_Manga = manga_info[0].chapters;
-
-    const chapter = chapters_Of_The_Manga.find((chp, i) => chp.id = mangaId);
-
-    return chapter;
-}
 
 
 
@@ -157,5 +148,5 @@ export   {
     getMainPage,
     getSpecificMangaInfo,
     getSpecificMangaInfoLink,
-    findMangaById
+    
 };
