@@ -130,13 +130,13 @@ async function getChapterPages(chapterUrl) {
 }
 
 
-// getSpecificMangaInfo("vinland").then(res => {
-//     res[0].chapters.forEach(chp => {
-//         console.log(chp.link);
+getSpecificMangaInfo("vinland").then(res => {
+    res[0].chapters.forEach(chp => {
+        console.log(chp.link);
         
-//     })
+    })
     
-// })
+})
 
 
 
