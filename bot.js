@@ -136,7 +136,7 @@ bot.on("callback_query", async (query) => {
 
     let chapterLink = base_url + data[1];
     
-    const chapterNumber = chapterLink.split("manga/").split("/")[1].split("-").join(" ");
+    const chapterNumber = chapterLink.split("manga/")[1].split("/")[1].split("-").join(" ");
  
       
       console.log('decoded url: ', chapterLink);
